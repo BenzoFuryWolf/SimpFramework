@@ -40,8 +40,19 @@ class Context:
     def path(self):
         return self.scope['path']
 
-    def query_string(self):
-        return self.scope['query_string']
+    def query_params(self):
+        params = {}
+        query_string = str(self.scope['query_string'])
+        query_string = query_string.replace("b", '', 1)
+        query_string = query_string.replace("'", '', 2)
+        if query_string:
+            req_queries = query_string.split('&')
+
+            for query in req_queries:
+                query_key, query_val = query.split("=")
+
+                params[query_key] = query_val
+        return params
 
     def getHeaders(self):
         return self.scope['headers']
