@@ -2,15 +2,20 @@ from typing import Callable
 
 
 class Router:
-    def __init__(self):
+    def __init__(self, prefix: str = None):
         self.routes = {}
+        self.prefix = prefix
 
     def __call__(self):
         return self.routes
 
     def route(self, path: str,method: str, handler) -> Callable:
         # переменная для маршрутизации (По пути который передаём либо от названия хендлера)
-        path_name = path or f"/{handler.__name__}"
+        # Задана для обработки префикса из роутера.
+        if self.prefix is None:
+            path_name = path or f"/{handler.__name__}"
+        else:
+            path_name = f"{self.prefix}{path}"
 
         if path_name not in self.routes:
             self.routes[path_name] = {}
@@ -48,3 +53,6 @@ class Router:
             return self.route(path, "DELETE", handler)
 
         return wrapper
+
+    def include_router(self, routes:dict):
+        self.routes = {**self.routes, **routes}

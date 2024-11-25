@@ -9,7 +9,7 @@ class Simp:
         self.routes = {}
 
     async def __call__(self, scope, receive, send):
-        # Этот блок кода для отработки lifespan протокола asgi сервера uvicorn
+        # Этот блок кода для отработки lifespan протокола asgi сервера
         if scope['type'] == 'lifespan':
             while True:
                 message = await receive()
@@ -24,8 +24,6 @@ class Simp:
             #Инициализация контекста
             ctx = Context(scope, receive, send)
 
-            print(scope)
-            print(await receive())
             #Обработка маршрутов по которым обращается пользователь
             for path, handler_dict in self.routes.items():
                 #парсинг именованных параметров в строке запроса
@@ -35,6 +33,7 @@ class Simp:
                 #Сравнение пути из словаря и пути из запроса
                 #Если они совпадают, то запускается переборка внутреннего словаря(handler_dict) по методам(get, post и т.д)
                 if path == ctx.path():
+
                     for requst_method, handler in handler_dict.items():
                         #Сравнение метода обращения и методов, которые есть в словаре(handler_dict)
                         if ctx.method() == requst_method:
