@@ -242,6 +242,7 @@ def date_convert(
     elif tz:
         tz = tz.strip()
         if tz.isupper():
+            # TODO use the awesome python TZ module?
             pass
         else:
             sign = tz[0]
