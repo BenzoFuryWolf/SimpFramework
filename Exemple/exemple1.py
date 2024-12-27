@@ -3,10 +3,10 @@ import datetime
 import uvicorn
 
 from http import HTTPStatus
-from Simp.app import Simp
+from Simp.app import App
 from Simp.context import Context
 
-app = Simp()
+app = App()
 
 @app.get("/")
 async def ind(ctx: Context):
