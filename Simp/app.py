@@ -3,8 +3,8 @@ from collections.abc import Callable
 from http import HTTPStatus
 from typing import Tuple
 
-from framework.context import Context
-from framework.parse import parse
+from .context import Context
+from .parse import parse
 from .WS_Context import *
 import ast
 
