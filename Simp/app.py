@@ -8,7 +8,7 @@ from framework.parse import parse
 from .WS_Context import *
 import ast
 
-class Simp:
+class App:
     def __init__(self):
         self.before_middleware = {}
         self.after_middleware = {}
