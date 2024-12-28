@@ -7,9 +7,15 @@ class Router:
         self.after_middleware = {}
         self.routes = {}
         self.prefix = prefix
+        self.ws_routes = {}
+        self.ws_before={}
+        self.ws_after={}
 
     def __call__(self):
         return {
+            'ws_routes':self.ws_routes,
+            'ws_before':self.ws_before,
+            'ws_after':self.ws_after,
             'routes':self.routes,
             'before_middleware':self.before_middleware,
             'after_middleware':self.after_middleware,
@@ -69,3 +75,17 @@ class Router:
         self.routes = {**self.routes, **routes['routes']}
         self.before_middleware = {**self.before_middleware, **routes['before_middleware']}
         self.after_middleware = {**self.after_middleware, **routes['after_middleware']}
+
+    def ws_route(self, path: str, handler: Callable, before:Callable = None, after:Callable = None) -> None:
+        if before is not None:
+            self.ws_before[path] = handler
+
+        self.ws_routes[path] = handler
+
+        if after is not None:
+            self.ws_after[path] = handler
+
+    def ws(self, path: str , before: Callable = None, after: Callable = None) -> Callable:
+        def wrapper(handler: Callable) -> None:
+            return self.ws_route(path, handler, before, after)
+        return wrapper
