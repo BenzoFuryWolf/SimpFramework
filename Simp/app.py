@@ -3,8 +3,8 @@ from collections.abc import Callable
 from http import HTTPStatus
 from typing import Tuple
 
-from framework.context import Context
-from framework.parse import parse
+from .context import Context
+from .parse import parse
 from .WS_Context import *
 import ast
 
@@ -14,7 +14,6 @@ class App:
         self.after_middleware = {}
         self.middlewares = {'before':{}, 'after':{}}
         self.routes = {}
-        self.websockets = {}
         self.ws_routes = {}
         self.ws_before={}
         self.ws_after={}
@@ -160,6 +159,9 @@ class App:
         return wrapper
 
     def include_router(self, routes:dict):
+        self.ws_routes = {**self.ws_routes, **routes['ws_routes']}
+        self.ws_after = {**self.ws_after, **routes['ws_after']}
+        self.ws_before = {**self.ws_before, **routes['ws_before']}
         self.routes = {**self.routes, **routes['routes']}
         self.before_middleware = {**self.before_middleware, **routes['before_middleware']}
         self.after_middleware = {**self.after_middleware, **routes['after_middleware']}
